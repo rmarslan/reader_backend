@@ -33,6 +33,12 @@ const handleDbValidation = err => {
   return new AppError(message, 400);
 };
 
+const handleDbDeplicateKey = err => {
+  const value = err.message.match(new RegExp('"(.*?)"'));
+  const message = `duplicate value: ${value[0]}, please use another one`;
+  return new AppError(message, 400);
+};
+
 const errorController = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -41,6 +47,7 @@ const errorController = (err, req, res, next) => {
     sendDevelopmentError(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     if (err.name === 'ValidationError') err = handleDbValidation(err);
+    if (err.code === 11000) err = handleDbDeplicateKey(err);
     sendProductionError(err, res);
   }
 };
