@@ -16,3 +16,16 @@ exports.addNewCategory = async (req, res, next) => {
     data: { category }
   });
 };
+
+exports.updateCategory = async (req, res, next) => {
+  const { id } = req.params;
+  const category = await Category.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: { category }
+  });
+};
