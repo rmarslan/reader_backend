@@ -8,10 +8,17 @@ const sendDevelopmentError = (err, res) => {
 };
 
 const sendProductionError = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.message
-  });
+  if (err.isOperational) {
+    res.status(err.statusCode).json({
+      status: err.status,
+      message: err.message
+    });
+  } else {
+    res.status(500).json({
+      status: 'error',
+      message: 'something went wrong'
+    });
+  }
 };
 
 const errorController = (err, req, res, next) => {
