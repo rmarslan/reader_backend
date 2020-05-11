@@ -39,6 +39,11 @@ const handleDbDeplicateKey = err => {
   return new AppError(message, 400);
 };
 
+const handleDbCastError = err => {
+  const message = `invalid object id: ${err.value}`;
+  return new AppError(message, 400);
+};
+
 const errorController = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -48,6 +53,7 @@ const errorController = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === 'production') {
     if (err.name === 'ValidationError') err = handleDbValidation(err);
     if (err.code === 11000) err = handleDbDeplicateKey(err);
+    if (err.name === 'CastError') err = handleDbCastError(err);
     sendProductionError(err, res);
   }
 };
