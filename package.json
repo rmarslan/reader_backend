@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "cross-env NODE_ENV=development nodemon server.js"
+    "start:dev": "cross-env NODE_ENV=development DEBUG=reader:* nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
     "node": "10.0.0"
   },
   "dependencies": {
+    "debug": "^4.1.1",
     "express": "^4.17.1"
   }
 }
